@@ -1,8 +1,30 @@
 .sidebar{
-    /* width: 7.8%; */
+    width: 7.8%;
     color: #3D454F;
     display: flex;
     flex-direction: column;
     align-items: center;
     height: 700px;
+}
+
+@media screen and (max-width: 500){
+    .sidebar{
+        width: 10%;
+        color: #3D454F;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 700px;
+    }
+}
+
+@media screen and (min-width: 1024px) and (max-width: 1030px){
+    .sidebar{
+        width: 10%;
+        color: #3D454F;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 700px;
+    }
 }

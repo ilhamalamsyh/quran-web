@@ -9,7 +9,6 @@ export const Sidebar = (props) => {
       <div className="sidebar" style={{ width: width }}>
         {props.children}
       </div>
-      <div></div>
     </React.Fragment>
   );
 };

@@ -14,3 +14,44 @@
     outline: none;
     opacity: 0.9;
 }
+
+.searchbar-container{
+    margin-left: 40%;
+}
+
+
+@media screen and (max-width: 500px){
+    .searchbar-container{
+        margin-left: 20%;
+    }
+
+    .searchInput{
+        width: 120px;
+        height: 9px;
+        border: 1px solid #B5C2CD;
+        border-radius: 30px;
+        font-size: 12px;
+        background-color: #FFFFFF;
+        background-image:url('../../assets/images/search_icon.svg');
+        background-size: 15px;
+        background-position: 10px 4.5px;
+        background-repeat: no-repeat;
+        padding: 8px 20px 8px 40px;
+        -webkit-transition: width 0.8s ease-in-out;
+        transition: width 0.8s ease-in-out;
+        outline: none;
+        opacity: 0.9;
+    }
+}
+
+@media screen and (max-width: 1000px) and (min-width: 510px){
+    .searchbar-container{
+        margin-left: 20%;
+    }
+}
+
+@media screen and (min-width: 1024px) and (max-width: 1030px){
+    .searchbar-container{
+        margin-left: 30%;
+    }
+}

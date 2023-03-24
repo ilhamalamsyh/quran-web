@@ -7,11 +7,7 @@ export const Search = ({ searchQuery }) => {
   const placeholder = "Search...";
 
   return (
-    <div
-      style={{
-        marginLeft: "40%",
-      }}
-    >
+    <div className="searchbar-container">
       <input
         type="text"
         placeholder={placeholder}

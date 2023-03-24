@@ -1,0 +1,41 @@
+.container-logo{
+    margin-right: 2.3%;
+    margin-left: 8;
+}
+
+.logo-image{
+    height: 40px;
+    width: 40px;
+}
+
+.header-menu{
+    display: flex;
+    flex-flow: row;
+    gap: 10%;
+}
+
+
+.header-menu-text-selected{
+    font-weight: bold;
+    font-size: 22px;
+}
+
+.header-menu-text-unselected{
+    color: #B5C2CD;
+    font-size: 22px;
+}
+
+@media screen and (max-width: 500px){
+    .header-menu-text-selected{
+        font-size: 14px;
+    }
+    
+    .header-menu-text-unselected{
+        font-size: 14px;
+    }
+
+    .logo-image{
+        height: 22px;
+        width: 22px;
+    }
+}
