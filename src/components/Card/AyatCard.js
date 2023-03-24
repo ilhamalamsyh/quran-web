@@ -22,6 +22,12 @@ const useStyles = makeStyles(() => ({
     "@media (max-width: 500px)": {
       width: 250,
     },
+    "@media screen and (max-width: 1000px) and (min-width: 510px)": {
+      width: 500,
+    },
+    "@media screen and (min-width: 1024px) and (max-width: 1030px)": {
+      width: 650,
+    },
   },
 }));
 
@@ -40,6 +46,12 @@ export const AyatCard = ({ data }) => {
             },
             "@media (max-width: 500px)": {
               width: 330,
+            },
+            "@media screen and (max-width: 1000px) and (min-width: 510px)": {
+              width: 650,
+            },
+            "@media screen and (min-width: 1024px) and (max-width: 1030px)": {
+              width: 700,
             },
           }}
           elevation={0}
@@ -76,6 +88,10 @@ export const AyatCard = ({ data }) => {
                           "@media (max-width: 500px)": {
                             fontSize: 28,
                           },
+                          "@media screen and (max-width: 1000px) and (min-width: 510px)":
+                            {
+                              fontSize: 28,
+                            },
                         }}
                       >
                         {value.teksArab}
