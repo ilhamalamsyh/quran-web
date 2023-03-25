@@ -8,13 +8,15 @@ export const Search = ({ searchQuery }) => {
 
   return (
     <div className="searchbar-container">
-      <input
-        type="text"
-        placeholder={placeholder}
-        className="searchInput"
-        value={query}
-        onChange={(e) => setQuery(searchQuery(e.target.value))}
-      />
+      <form>
+        <input
+          type="text"
+          placeholder={placeholder}
+          className="searchInput"
+          value={query}
+          onChange={(e) => setQuery(searchQuery(e.target.value))}
+        />
+      </form>
     </div>
   );
 };
