@@ -10,7 +10,7 @@ export const Search = ({ searchQuery }) => {
     <div className="searchbar-container">
       <form>
         <input
-          type="search"
+          type="text"
           placeholder={placeholder}
           className="searchInput"
           value={query}
