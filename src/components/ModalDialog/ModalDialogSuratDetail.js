@@ -28,9 +28,22 @@ export const ModalDialogSuratDetail = ({ content, isOpen, handleClose }) => {
       <DialogTitle>
         <Grid container display={"flex"} flexDirection={"column"}>
           <Grid item>
-            <Grid container display={"flex"} justifyContent="space-between">
+            <Grid
+              container
+              display={"flex"}
+              flexDirection={"row"}
+              justifyContent="space-between"
+            >
               <Grid item textAlign={"center"}>
-                <Typography sx={{ fontSize: 20 }}>
+                <Typography
+                  paddingTop={1}
+                  sx={{
+                    fontSize: 20,
+                    "@media (max-width: 500px)": {
+                      fontSize: 16,
+                    },
+                  }}
+                >
                   Surat {content.namaLatin} ({content.arti})
                 </Typography>
               </Grid>
@@ -44,13 +57,35 @@ export const ModalDialogSuratDetail = ({ content, isOpen, handleClose }) => {
           <Grid item>
             <Grid container display={"flex"} flexDirection={"column"}>
               <Grid item>
-                <Typography>Jumlah ayat {content.jumlahAyat}</Typography>
+                <Typography
+                  sx={{
+                    "@media (max-width: 500px)": {
+                      fontSize: 14,
+                    },
+                  }}
+                >
+                  Jumlah ayat {content.jumlahAyat}
+                </Typography>
               </Grid>
               <Grid item>
-                <Typography>Surat ke {content.nomor}</Typography>
+                <Typography
+                  sx={{
+                    "@media (max-width: 500px)": {
+                      fontSize: 14,
+                    },
+                  }}
+                >
+                  Surat ke {content.nomor}
+                </Typography>
               </Grid>
               <Grid item>
-                <Typography>
+                <Typography
+                  sx={{
+                    "@media (max-width: 500px)": {
+                      fontSize: 14,
+                    },
+                  }}
+                >
                   Diturunkan di kota {content.tempatTurun}
                 </Typography>
               </Grid>
@@ -58,11 +93,28 @@ export const ModalDialogSuratDetail = ({ content, isOpen, handleClose }) => {
           </Grid>
         </Grid>
       </DialogTitle>
-      <DialogContent sx={{ maxWidth: 600, width: 500, paddingBottom: 4 }}>
+      <DialogContent
+        sx={{
+          maxWidth: 600,
+          width: 500,
+          paddingBottom: 4,
+          "@media (max-width: 500px)": {
+            width: 250,
+          },
+        }}
+      >
         <DialogContentText id="alert-dialog-slide-description">
           <Grid container display={"flex"} direction={"column"}>
             <Grid item>
-              <Typography>{content.deskripsi}</Typography>
+              <Typography
+                sx={{
+                  "@media (max-width: 500px)": {
+                    fontSize: 14,
+                  },
+                }}
+              >
+                {content.deskripsi}
+              </Typography>
             </Grid>
           </Grid>
         </DialogContentText>

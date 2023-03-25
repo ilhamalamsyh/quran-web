@@ -2,24 +2,77 @@ import React, { useEffect, useState } from "react";
 import { Header } from "../../components/Header/Header";
 import { Sidebar } from "../../components/SideBar/Sidebar";
 import {
+  Box,
   Button,
   Card,
   CardContent,
+  Divider,
   Grid,
   IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  SwipeableDrawer,
   Tooltip,
   Typography,
 } from "@mui/material";
 
 import openedQuranIcon from "../../assets/images/open_book_icon.svg";
+import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 
 import quranLogo from "../../assets/images/quran.png";
 import Brightness5OutlinedIcon from "@mui/icons-material/Brightness5Outlined";
 import { getSuratDetail } from "./services/quran_service";
 import { AyatCard } from "../../components/Card/AyatCard";
 import { useHistory, useParams } from "react-router-dom";
-import { ArrowBack, ArrowForward, Info } from "@mui/icons-material";
+import {
+  ArrowBack,
+  ArrowForward,
+  Close,
+  HomeRounded,
+  Info,
+} from "@mui/icons-material";
 import { ModalDialogSuratDetail } from "../../components/ModalDialog/ModalDialogSuratDetail";
+import { makeStyles } from "@material-ui/core";
+
+const useStyles = makeStyles(() => ({
+  ayatList: {
+    background: "#EBEFF1",
+    width: "74%",
+    marginTop: "0.5em",
+    borderRadius: 40,
+    padding: 30,
+    display: "inline-block",
+    overflowY: "scroll",
+    maxHeight: 580,
+    "@media (max-width: 500px)": {
+      width: "90%",
+      marginLeft: 5,
+      paddingLeft: 10,
+      paddingRight: 12,
+      paddingTop: 30,
+      paddingBottom: 30,
+      borderRadius: 30,
+    },
+  },
+  suratHeader: {
+    width: 700,
+    fontSize: 25,
+    borderRadius: 20,
+    display: "flex",
+    justifyContent: "center",
+    textAlign: "center",
+    fontWeight: "bold",
+    gap: 12,
+    "@media (max-width: 500px)": {
+      width: 200,
+      fontSize: 12,
+      gap: 10,
+    },
+  },
+}));
 
 export const SuratDetail = () => {
   const { nomor } = useParams();
@@ -27,6 +80,7 @@ export const SuratDetail = () => {
   const [ayatList, setAyatList] = useState([]);
   const [surat, setSurat] = useState({});
   const history = useHistory();
+  const classes = useStyles();
 
   const surahIndex = Array.from({ length: 114 }, (_, index) => index + 1);
   // eslint-disable-next-line no-unused-vars
@@ -48,85 +102,134 @@ export const SuratDetail = () => {
     setAyatList(suratDetail?.data?.data?.ayat);
   }, []);
 
+  // Start of Drawer
+  const [state, setState] = useState({
+    top: false,
+    left: false,
+    bottom: false,
+    right: false,
+  });
+
+  const toggleDrawer = (anchor, open) => (event) => {
+    if (
+      event &&
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+
+    setState({ ...state, [anchor]: open });
+  };
+
+  const menuListData = [
+    {
+      title: "Home",
+      icon: <HomeRounded />,
+      onClick: () => history.push("/"),
+    },
+  ];
+
+  const list = (anchor) => (
+    <Box
+      sx={{ width: 250 }}
+      role="presentation"
+      onClick={toggleDrawer(anchor, false)}
+      onKeyDown={toggleDrawer(anchor, false)}
+    >
+      <div style={{ textAlign: "right", paddingRight: 10 }}>
+        <IconButton>
+          <Close />
+        </IconButton>
+      </div>
+      <Divider />
+      <List>
+        {menuListData.map((menu, index) => (
+          <ListItem key={index} disablePadding>
+            <ListItemButton onClick={menu.onClick}>
+              <ListItemIcon>{menu.icon}</ListItemIcon>
+              <ListItemText primary={menu.title} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+      <Divider />
+    </Box>
+  );
+  // End of Drawer
+
   return (
     <React.Fragment>
       <Header>
-        <div style={{ marginRight: "2.3%", marginLeft: 8 }}>
-          <img src={quranLogo} height={40} width={40} alt="quran-logo" />
-        </div>
-        <div
-          style={{
-            display: "flex",
-            flexFlow: "row",
-            gap: "10%",
-          }}
-        >
-          {isQuran ? (
-            <React.Fragment>
-              <div onClick={() => setIsQuran(true)}>
-                <p style={{ fontWeight: "bold", fontSize: "22px" }}>Quran</p>
-              </div>
-              <div onClick={() => setIsQuran(false)}>
-                <p
-                  style={{
-                    fontSize: "22px",
-                    color: "#B5C2CD",
-                  }}
-                >
-                  Hadith
-                </p>
-              </div>
-            </React.Fragment>
+        <div className="container-logo">
+          {window.innerWidth >= 500 ? (
+            <img className="logo-image" src={quranLogo} alt="quran-logo" />
           ) : (
             <React.Fragment>
-              <div onClick={() => setIsQuran(true)}>
-                <p style={{ fontSize: "22px", color: "#B5C2CD" }}>Quran</p>
-              </div>
-              <div onClick={() => setIsQuran(false)}>
-                <p
-                  style={{
-                    fontSize: "22px",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Hadith
-                </p>
-              </div>
+              <IconButton onClick={toggleDrawer("left", true)}>
+                <MenuRoundedIcon color="primary" />
+              </IconButton>
+              <SwipeableDrawer
+                anchor={"left"}
+                open={state["left"]}
+                onClose={toggleDrawer("left", false)}
+                onOpen={toggleDrawer("left", true)}
+              >
+                {list("left")}
+              </SwipeableDrawer>
             </React.Fragment>
           )}
         </div>
+        {window.innerWidth >= 500 ? (
+          <div className="header-menu">
+            {isQuran ? (
+              <React.Fragment>
+                <div onClick={() => setIsQuran(true)}>
+                  <p className="header-menu-text-selected">Quran</p>
+                </div>
+                <div onClick={() => setIsQuran(false)}>
+                  <p className="header-menu-text-unselected">Hadith</p>
+                </div>
+              </React.Fragment>
+            ) : (
+              <React.Fragment>
+                <div onClick={() => setIsQuran(true)}>
+                  <p className="header-menu-text-unselected">Quran</p>
+                </div>
+                <div onClick={() => setIsQuran(false)}>
+                  <p className="header-menu-text-selected">Hadith</p>
+                </div>
+              </React.Fragment>
+            )}
+          </div>
+        ) : (
+          <div>
+            <p className="header-menu-text-selected">Quran</p>
+          </div>
+        )}
       </Header>
       <div
         style={{
           display: "flex",
         }}
       >
-        <Sidebar width="7.8%">
-          <div style={{ marginTop: "2em" }}>
-            <Tooltip title="Quran">
-              <IconButton onClick={() => history.push("/")}>
-                <img
-                  src={openedQuranIcon}
-                  height={30}
-                  width={30}
-                  alt="quran-logo"
-                />
-              </IconButton>
-            </Tooltip>
-          </div>
-        </Sidebar>
-        <div
-          style={{
-            background: "#EBEFF1",
-            width: "74%",
-            marginTop: "0.5em",
-            borderRadius: 40,
-            padding: 30,
-            display: "inline-block",
-            overflowY: "scroll",
-            maxHeight: 580,
-          }}
-        >
+        {window.innerWidth >= 500 ? (
+          <Sidebar>
+            <div style={{ marginTop: "2em" }}>
+              <Tooltip title="Quran">
+                <IconButton onClick={() => history.push("/")}>
+                  <img
+                    src={openedQuranIcon}
+                    height={30}
+                    width={30}
+                    alt="quran-logo"
+                  />
+                </IconButton>
+              </Tooltip>
+            </div>
+          </Sidebar>
+        ) : null}
+        <div className={classes.ayatList}>
           <Card elevation={0} sx={{ borderRadius: 2 }}>
             <CardContent>
               <Grid
@@ -144,39 +247,44 @@ export const SuratDetail = () => {
                     justifyContent="center"
                     rowGap={2}
                   >
-                    <div
-                      style={{
-                        width: 700,
-                        fontSize: 25,
-                        borderRadius: 20,
-                        display: "flex",
-                        justifyContent: "center",
-                        textAlign: "center",
-                        fontWeight: "bold",
-                        gap: 12,
-                      }}
-                    >
-                      <Typography paddingTop={2} sx={{ fontSize: 20 }}>
+                    <div className={classes.suratHeader}>
+                      <Typography
+                        paddingTop={2}
+                        sx={{
+                          fontSize: 20,
+                          "@media (max-width: 500px)": {
+                            fontSize: 14,
+                          },
+                        }}
+                      >
                         {surat.namaLatin}
                       </Typography>
-                      <Brightness5OutlinedIcon sx={{ paddingTop: 2 }} />
-                      <Typography sx={{ fontSize: 40 }}>
+                      <Brightness5OutlinedIcon
+                        fontSize="small"
+                        sx={{ paddingTop: 2 }}
+                      />
+                      <Typography
+                        paddingTop={window.innerWidth >= 500 ? 0 : 1.5}
+                        sx={{
+                          fontSize: 40,
+                          "@media (max-width: 500px)": {
+                            fontSize: 20,
+                          },
+                        }}
+                      >
                         {surat.nama}
                       </Typography>
                     </div>
                     {surat.nomor === 1 ? null : (
-                      <div
-                        style={{
-                          width: 700,
-                          fontSize: 25,
-                          borderRadius: 20,
-                          display: "flex",
-                          justifyContent: "center",
-                          textAlign: "center",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        <Typography sx={{ fontSize: 35 }}>
+                      <div className={classes.suratHeader}>
+                        <Typography
+                          sx={{
+                            fontSize: 35,
+                            "@media (max-width: 500px)": {
+                              fontSize: 25,
+                            },
+                          }}
+                        >
                           بِسْمِ اللهِ الرَّحْمَنِ الرَّحِيْمِ
                         </Typography>
                       </div>
@@ -196,6 +304,9 @@ export const SuratDetail = () => {
                       color: "#2c5f2dff",
                       "&:hover": {
                         backgroundColor: "white",
+                      },
+                      "@media (max-width: 500px)": {
+                        fontSize: "12px",
                       },
                     }}
                   >
@@ -232,7 +343,11 @@ export const SuratDetail = () => {
                   }}
                   disableRipple
                   variant="text"
-                  startIcon={<ArrowBack />}
+                  startIcon={
+                    <ArrowBack
+                      fontSize={window.innerWidth >= 500 ? "medium" : "small"}
+                    />
+                  }
                   sx={{
                     borderRadius: 20,
                     fontSize: "14px",
@@ -240,6 +355,9 @@ export const SuratDetail = () => {
                     color: "#2c5f2dff",
                     "&:hover": {
                       backgroundColor: "white",
+                    },
+                    "@media (max-width: 500px)": {
+                      fontSize: "11px",
                     },
                   }}
                 >
@@ -254,7 +372,11 @@ export const SuratDetail = () => {
                   }}
                   disableRipple
                   variant="text"
-                  endIcon={<ArrowForward />}
+                  endIcon={
+                    <ArrowForward
+                      fontSize={window.innerWidth >= 500 ? "medium" : "small"}
+                    />
+                  }
                   sx={{
                     borderRadius: 20,
                     fontSize: "14px",
@@ -262,6 +384,9 @@ export const SuratDetail = () => {
                     color: "#2c5f2dff",
                     "&:hover": {
                       backgroundColor: "white",
+                    },
+                    "@media (max-width: 500px)": {
+                      fontSize: "11px",
                     },
                   }}
                 >

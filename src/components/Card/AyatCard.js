@@ -1,5 +1,5 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
+import { makeStyles } from "@material-ui/core";
 import {
   Box,
   Card,
@@ -8,9 +8,31 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
+
+const useStyles = makeStyles(() => ({
+  arabText: {
+    width: 700,
+    fontSize: 25,
+    borderRadius: 20,
+    display: "flex",
+    justifyContent: "flex-end",
+    textAlign: "right",
+    fontWeight: "bold",
+    "@media (max-width: 500px)": {
+      width: 250,
+    },
+    "@media screen and (max-width: 1000px) and (min-width: 510px)": {
+      width: 500,
+    },
+    "@media screen and (min-width: 1024px) and (max-width: 1030px)": {
+      width: 650,
+    },
+  },
+}));
 
 export const AyatCard = ({ data }) => {
+  const classes = useStyles();
   return data?.map((value) => {
     return (
       <div key={value.nomorAyat}>
@@ -21,6 +43,15 @@ export const AyatCard = ({ data }) => {
             boxShadow: "0px 2px 40px -28px rgba(0,0,0,0.3)",
             "&:hover": {
               boxShadow: "0 16px 70px -12px rgba(0,0,0,0.3)",
+            },
+            "@media (max-width: 500px)": {
+              width: 330,
+            },
+            "@media screen and (max-width: 1000px) and (min-width: 510px)": {
+              width: 650,
+            },
+            "@media screen and (min-width: 1024px) and (max-width: 1030px)": {
+              width: 700,
             },
           }}
           elevation={0}
@@ -50,18 +81,19 @@ export const AyatCard = ({ data }) => {
                     >
                       {value.nomorAyat}
                     </div>
-                    <div
-                      style={{
-                        width: 700,
-                        fontSize: 25,
-                        borderRadius: 20,
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        textAlign: "right",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      <Typography sx={{ fontSize: 35 }}>
+                    <div className={classes.arabText}>
+                      <Typography
+                        sx={{
+                          fontSize: 35,
+                          "@media (max-width: 500px)": {
+                            fontSize: 28,
+                          },
+                          "@media screen and (max-width: 1000px) and (min-width: 510px)":
+                            {
+                              fontSize: 28,
+                            },
+                        }}
+                      >
                         {value.teksArab}
                       </Typography>
                     </div>
@@ -75,6 +107,9 @@ export const AyatCard = ({ data }) => {
                           sx={{
                             fontSize: 14,
                             fontWeight: "bold",
+                            "@media (max-width: 500px)": {
+                              fontSize: 12,
+                            },
                           }}
                         >
                           {value.teksLatin}
@@ -88,61 +123,15 @@ export const AyatCard = ({ data }) => {
                             fontSize: 14,
                             opacity: 0.3,
                             fontWeight: "bold",
+                            "@media (max-width: 500px)": {
+                              fontSize: 12,
+                            },
                           }}
                         >
                           {value.teksIndonesia}
                         </Typography>
                       </Box>
                     </Grid>
-                    {/* <Grid item sx={{ paddingTop: 2 }}>
-                      <Grid
-                        container
-                        display="flex"
-                        flexDirection="row"
-                        gap={2}
-                      >
-                        <Grid item>
-                          <Box>
-                            <Typography
-                              sx={{
-                                fontSize: 14,
-                                fontWeight: "bold",
-                                background: "#90D0B5",
-                                width: 100,
-                                height: 30,
-                                borderRadius: 20,
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                color: "#3B9B6E",
-                              }}
-                            >
-                              {value.jumlahAyat} Ayat
-                            </Typography>
-                          </Box>
-                        </Grid>
-                        <Grid item>
-                          <Box>
-                            <Typography
-                              sx={{
-                                fontSize: 14,
-                                fontWeight: "bold",
-                                background: "#90D0B5",
-                                width: 100,
-                                height: 30,
-                                borderRadius: 20,
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                color: "#3B9B6E",
-                              }}
-                            >
-                              {value.tempatTurun}
-                            </Typography>
-                          </Box>
-                        </Grid>
-                      </Grid>
-                    </Grid> */}
                   </Grid>
                 </Grid>
               </Grid>

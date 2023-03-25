@@ -9,18 +9,51 @@ import {
   Divider,
   Grid,
   IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  SwipeableDrawer,
   Tooltip,
   Typography,
 } from "@mui/material";
 
+import "./styles/home_style.css";
+import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
+import MenuBookRoundedIcon from "@mui/icons-material/MenuBookRounded";
 import openedQuranIcon from "../../assets/images/open_book_icon.svg";
 import dotsNineIcon from "../../assets/images/dots-nine-selected.svg";
 import quranLogo from "../../assets/images/quran.png";
-import { MenuRounded } from "@mui/icons-material";
+import { Close, HomeRounded, MenuRounded } from "@mui/icons-material";
 import { SurahCard } from "../../components/Card/SurahCard";
 import { getSuratDetail, getSuratList } from "./services/quran_service";
 import { Search } from "../../components/Search/Search";
 import { ModalDialog } from "../../components/ModalDialog/ModalDialog";
+import { makeStyles } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
+
+const useStyles = makeStyles(() => ({
+  suratList: {
+    background: "#EBEFF1",
+    width: "80%",
+    marginTop: "0.5em",
+    borderRadius: 40,
+    padding: 30,
+    display: "inline-block",
+    overflowY: "scroll",
+    maxHeight: 580,
+    "@media (max-width: 500px)": {
+      width: "85%",
+      marginLeft: 8,
+      paddingLeft: 10,
+      paddingRight: 30,
+      paddingTop: 30,
+      paddingBottom: 30,
+      borderRadius: 30,
+    },
+  },
+}));
 
 export const Home = () => {
   const [menuListIndex, setMenuListIndex] = useState(0);
@@ -32,6 +65,9 @@ export const Home = () => {
     suratNumber: "",
     ayatTeksIndo: "",
   });
+
+  const classes = useStyles();
+  const history = useHistory();
 
   const surahIndex = Array.from({ length: 114 }, (_, index) => index + 1);
   const getRandomIndex = Math.floor(Math.random() * surahIndex.length);
@@ -76,53 +112,121 @@ export const Home = () => {
     return item.namaLatin.toLowerCase().includes(queryString);
   });
 
+  // Start of Drawer
+  const [state, setState] = useState({
+    top: false,
+    left: false,
+    bottom: false,
+    right: false,
+  });
+
+  const toggleDrawer = (anchor, open) => (event) => {
+    if (
+      event &&
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+
+    setState({ ...state, [anchor]: open });
+  };
+
+  const menuListData = [
+    {
+      title: "Home",
+      icon: <HomeRounded />,
+      onClick: () => history.push("/"),
+    },
+    {
+      title: "Ayat of the Day",
+      icon: <MenuBookRoundedIcon />,
+      onClick: handleClickOpen,
+    },
+  ];
+
+  const list = (anchor) => (
+    <Box
+      sx={{ width: 250 }}
+      role="presentation"
+      onClick={toggleDrawer(anchor, false)}
+      onKeyDown={toggleDrawer(anchor, false)}
+    >
+      <div style={{ textAlign: "right", paddingRight: 10 }}>
+        <IconButton>
+          <Close />
+        </IconButton>
+      </div>
+      <Divider />
+      <List>
+        {menuListData.map((menu, index) => (
+          <ListItem key={index} disablePadding>
+            <ListItemButton onClick={menu.onClick}>
+              <ListItemIcon>{menu.icon}</ListItemIcon>
+              <ListItemText primary={menu.title} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+        <ModalDialog
+          content={ayatOfTheDay}
+          isOpen={open}
+          handleClose={handleClose}
+        />
+      </List>
+      <Divider />
+    </Box>
+  );
+  // End of Drawer
+
   return (
     <React.Fragment>
       <Header>
-        <div style={{ marginRight: "2.3%", marginLeft: 8 }}>
-          <img src={quranLogo} height={40} width={40} alt="quran-logo" />
-        </div>
-        <div
-          style={{
-            display: "flex",
-            flexFlow: "row",
-            gap: "10%",
-          }}
-        >
-          {isQuran ? (
-            <React.Fragment>
-              <div onClick={() => setIsQuran(true)}>
-                <p style={{ fontWeight: "bold", fontSize: "22px" }}>Quran</p>
-              </div>
-              <div onClick={() => setIsQuran(false)}>
-                <p
-                  style={{
-                    fontSize: "22px",
-                    color: "#B5C2CD",
-                  }}
-                >
-                  Hadith
-                </p>
-              </div>
-            </React.Fragment>
+        <div className="container-logo">
+          {window.innerWidth >= 500 ? (
+            <img className="logo-image" src={quranLogo} alt="quran-logo" />
           ) : (
             <React.Fragment>
-              <div onClick={() => setIsQuran(true)}>
-                <p style={{ fontSize: "22px", color: "#B5C2CD" }}>Quran</p>
-              </div>
-              <div onClick={() => setIsQuran(false)}>
-                <p
-                  style={{
-                    fontSize: "22px",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Hadith
-                </p>
-              </div>
+              <IconButton onClick={toggleDrawer("left", true)}>
+                <MenuRoundedIcon color="primary" />
+              </IconButton>
+              <SwipeableDrawer
+                anchor={"left"}
+                open={state["left"]}
+                onClose={toggleDrawer("left", false)}
+                onOpen={toggleDrawer("left", true)}
+              >
+                {list("left")}
+              </SwipeableDrawer>
             </React.Fragment>
           )}
         </div>
+        {window.innerWidth >= 500 ? (
+          <div className="header-menu">
+            {isQuran ? (
+              <React.Fragment>
+                <div onClick={() => setIsQuran(true)}>
+                  <p className="header-menu-text-selected">Quran</p>
+                </div>
+                <div onClick={() => setIsQuran(false)}>
+                  <p className="header-menu-text-unselected">Hadith</p>
+                </div>
+              </React.Fragment>
+            ) : (
+              <React.Fragment>
+                <div onClick={() => setIsQuran(true)}>
+                  <p className="header-menu-text-unselected">Quran</p>
+                </div>
+                <div onClick={() => setIsQuran(false)}>
+                  <p className="header-menu-text-selected">Hadith</p>
+                </div>
+              </React.Fragment>
+            )}
+          </div>
+        ) : (
+          <div>
+            <p className="header-menu-text-selected">Quran</p>
+          </div>
+        )}
         <Search searchQuery={searching} />
       </Header>
       <div
@@ -130,71 +234,70 @@ export const Home = () => {
           display: "flex",
         }}
       >
-        <Sidebar width="7.8%">
-          <div style={{ marginTop: "2em" }}>
-            <Tooltip title="Quran">
-              <IconButton>
-                <img
-                  src={openedQuranIcon}
-                  height={30}
-                  width={30}
-                  alt="quran-logo"
-                />
-              </IconButton>
-            </Tooltip>
-          </div>
-        </Sidebar>
-        <div
-          style={{
-            background: "#EBEFF1",
-            width: "74%",
-            marginTop: "0.5em",
-            borderRadius: 40,
-            padding: 30,
-            display: "inline-block",
-            overflowY: "scroll",
-            maxHeight: 580,
-          }}
-        >
+        {window.innerWidth >= 500 ? (
+          <Sidebar>
+            <div style={{ marginTop: "2em" }}>
+              <Tooltip title="Quran">
+                <IconButton>
+                  <img
+                    src={openedQuranIcon}
+                    height={30}
+                    width={30}
+                    alt="quran-logo"
+                  />
+                </IconButton>
+              </Tooltip>
+            </div>
+          </Sidebar>
+        ) : null}
+        <div className={classes.suratList}>
           <Grid container gap={0.5}>
-            <Grid item>
-              <IconButton onClick={() => setMenuListIndex(0)}>
-                {menuListIndex === 0 ? (
-                  <img
-                    src={dotsNineIcon}
-                    height={25}
-                    width={25}
-                    alt="dots-nine"
-                  />
-                ) : (
-                  <img
-                    src={dotsNineIcon}
-                    height={25}
-                    width={25}
-                    alt="dots-nine"
-                    style={{
-                      opacity: 0.4,
-                    }}
-                  />
-                )}
-              </IconButton>
-            </Grid>
-            <Grid item>
-              <IconButton onClick={() => setMenuListIndex(1)}>
-                {menuListIndex === 0 ? (
-                  <MenuRounded
-                    color="black"
-                    sx={{
-                      opacity: 0.4,
-                    }}
-                  />
-                ) : (
-                  <MenuRounded color="black" />
-                )}
-              </IconButton>
-            </Grid>
-
-            <Grid container paddingLeft={1.2} marginTop={5} gap={2}>
+            {window.innerWidth >= 500 ? (
+              <React.Fragment>
+                <Grid item>
+                  <IconButton onClick={() => setMenuListIndex(0)}>
+                    {menuListIndex === 0 ? (
+                      <img
+                        src={dotsNineIcon}
+                        height={25}
+                        width={25}
+                        alt="dots-nine"
+                      />
+                    ) : (
+                      <img
+                        src={dotsNineIcon}
+                        height={25}
+                        width={25}
+                        alt="dots-nine"
+                        style={{
+                          opacity: 0.4,
+                        }}
+                      />
+                    )}
+                  </IconButton>
+                </Grid>
+                <Grid item>
+                  <IconButton onClick={() => setMenuListIndex(1)}>
+                    {menuListIndex === 0 ? (
+                      <MenuRounded
+                        color="black"
+                        sx={{
+                          opacity: 0.4,
+                        }}
+                      />
+                    ) : (
+                      <MenuRounded color="black" />
+                    )}
+                  </IconButton>
+                </Grid>
+              </React.Fragment>
+            ) : null}
+            <Grid
+              container
+              paddingLeft={window.innerWidth >= 500 ? 1.2 : null}
+              marginTop={window.innerWidth >= 500 ? 5 : null}
+              gap={2}
+            >
               {menuListIndex === 0 ? (
                 <SurahCard
                   menuIndex={menuListIndex}
@@ -209,71 +312,70 @@ export const Home = () => {
             </Grid>
           </Grid>
         </div>
-        <Sidebar width="18.2%">
-          <div style={{ marginTop: "1em", padding: "2em" }}>
-            <Card
-              sx={{ background: "#05AC67", color: "#FFFFFF", borderRadius: 3 }}
-            >
-              <CardContent>
-                <Box sx={{ marginBottom: 2 }}>
-                  <Typography
+        {window.innerWidth >= 500 ? (
+          <Sidebar width="18.2%">
+            <div style={{ marginTop: "1em", padding: "2em" }}>
+              <Card
+                sx={{
+                  background: "#05AC67",
+                  color: "#FFFFFF",
+                  borderRadius: 3,
+                }}
+              >
+                <CardContent>
+                  <Box sx={{ marginBottom: 2 }}>
+                    <Typography
+                      sx={{
+                        color: "#ffffff",
+                        fontSize: 14,
+                      }}
+                    >
+                      Ayat of the day
+                    </Typography>
+                  </Box>
+                  <Box>
+                    <Typography
+                      sx={{
+                        fontSize: 12,
+                        display: "-webkit-box",
+                        overflow: "hidden",
+                        WebkitBoxOrient: "vertical",
+                        WebkitLineClamp: 6,
+                      }}
+                    >
+                      {ayatOfTheDay.ayatTeksIndo}
+                    </Typography>
+                  </Box>
+                  <Divider
                     sx={{
+                      marginTop: 1,
+                      marginBottom: 2,
+                      borderBottomWidth: 0.1,
+                      opacity: 0.5,
+                      backgroundColor: "#ffffff",
+                    }}
+                  />
+                  <Button
+                    size="small"
+                    onClick={handleClickOpen}
+                    sx={{
+                      fontSize: 10,
                       color: "#ffffff",
-                      fontSize: 14,
+                      textTransform: "capitalize",
                     }}
                   >
-                    Ayat of the day
-                  </Typography>
-                </Box>
-                <Box>
-                  {/* TODO: algorithm to get the random ayat
-                1. create number array from 1 until 114
-                2. when reload:
-                  1. randomize the number array
-                  2. when get the number, passing to surat detail endpoint
-                  3. success get data, randomize respon for ayat and get the teks indonesia
-                   */}
-                  <Typography
-                    sx={{
-                      fontSize: 12,
-                      display: "-webkit-box",
-                      overflow: "hidden",
-                      WebkitBoxOrient: "vertical",
-                      WebkitLineClamp: 6,
-                    }}
-                  >
-                    {ayatOfTheDay.ayatTeksIndo}
-                  </Typography>
-                </Box>
-                <Divider
-                  sx={{
-                    marginTop: 1,
-                    marginBottom: 2,
-                    borderBottomWidth: 0.1,
-                    opacity: 0.5,
-                    backgroundColor: "#ffffff",
-                  }}
-                />
-                <Button
-                  size="small"
-                  onClick={handleClickOpen}
-                  sx={{
-                    fontSize: 10,
-                    color: "#ffffff",
-                    textTransform: "capitalize",
-                  }}
-                >
-                  Read more...
-                </Button>
-                <ModalDialog
-                  content={ayatOfTheDay}
-                  isOpen={open}
-                  handleClose={handleClose}
-                />
-              </CardContent>
-            </Card>
-          </div>
-        </Sidebar>
+                    Read more...
+                  </Button>
+                  <ModalDialog
+                    content={ayatOfTheDay}
+                    isOpen={open}
+                    handleClose={handleClose}
+                  />
+                </CardContent>
+              </Card>
+            </div>
+          </Sidebar>
+        ) : null}
       </div>
     </React.Fragment>
   );
