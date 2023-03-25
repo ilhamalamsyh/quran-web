@@ -109,7 +109,7 @@ export const Home = () => {
   }, []);
 
   const query = suratList?.filter((item) => {
-    return item.namaLatin.toLowerCase().includes(queryString);
+    return item.namaLatin.toLowerCase().includes(queryString.trimStart());
   });
 
   // Start of Drawer
