@@ -178,6 +178,11 @@ export const Home = () => {
   );
   // End of Drawer
 
+  // debugging
+
+  console.log("query: ", query);
+  console.log("surat list: ", suratList);
+
   return (
     <React.Fragment>
       <Header>
