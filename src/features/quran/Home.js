@@ -227,7 +227,7 @@ export const Home = () => {
             <p className="header-menu-text-selected">Quran</p>
           </div>
         )}
-        <Search searchQuery={searching} />
+        <Search searchQuery={searching} q={queryString} />
       </Header>
       <div
         style={{
