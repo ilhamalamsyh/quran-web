@@ -105,12 +105,24 @@ export const Home = () => {
       ayatTeksIndo: randomAyat.teksIndonesia,
     });
 
-    setSuratList(surat?.data?.data);
-  }, []);
+    // const query = suratList?.filter((item) => {
+    //   return item.namaLatin.toLowerCase().includes(queryString.trimStart());
+    // });
+    queryString === ""
+      ? setSuratList(surat?.data?.data)
+      : setSuratList(
+          suratList?.filter((item) => {
+            return item.namaLatin
+              .toLowerCase()
+              .includes(queryString.trimStart());
+          })
+        );
+    // setSuratList(surat?.data?.data);
+  }, [queryString]);
 
-  const query = suratList?.filter((item) => {
-    return item.namaLatin.toLowerCase().includes(queryString.trimStart());
-  });
+  // const query = suratList?.filter((item) => {
+  //   return item.namaLatin.toLowerCase().includes(queryString.trimStart());
+  // });
 
   // Start of Drawer
   const [state, setState] = useState({
@@ -180,7 +192,7 @@ export const Home = () => {
 
   // debugging
 
-  console.log("surat filter: ", query);
+  // console.log("surat filter: ", query);
   console.log("surat list: ", suratList);
   console.log(queryString);
 
@@ -305,15 +317,9 @@ export const Home = () => {
               gap={2}
             >
               {menuListIndex === 0 ? (
-                <SurahCard
-                  menuIndex={menuListIndex}
-                  data={queryString === "" ? suratList : query}
-                />
+                <SurahCard menuIndex={menuListIndex} data={suratList} />
               ) : (
-                <SurahCard
-                  menuIndex={menuListIndex}
-                  data={queryString === "" ? suratList : query}
-                />
+                <SurahCard menuIndex={menuListIndex} data={suratList} />
               )}
             </Grid>
           </Grid>
