@@ -180,8 +180,9 @@ export const Home = () => {
 
   // debugging
 
-  console.log("query: ", query);
+  console.log("surat filter: ", query);
   console.log("surat list: ", suratList);
+  console.log(queryString);
 
   return (
     <React.Fragment>

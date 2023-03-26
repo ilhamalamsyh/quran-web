@@ -26,8 +26,8 @@
     }
 
     .searchInput{
-        width: 120px;
-        height: 9px;
+        width: 180px;
+        height: 28px;
         border: 1px solid #B5C2CD;
         border-radius: 30px;
         font-size: 12px;
@@ -37,8 +37,8 @@
         background-position: 10px 4.5px;
         background-repeat: no-repeat;
         padding: 8px 20px 8px 40px;
-        /* -webkit-transition: width 0.8s ease-in-out;
-        transition: width 0.8s ease-in-out; */
+        -webkit-transition: width 0.8s ease-in-out;
+        transition: width 0.8s ease-in-out;
         outline: none;
         opacity: 0.9;
     }
