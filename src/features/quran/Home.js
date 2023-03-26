@@ -20,7 +20,6 @@ import {
 } from "@mui/material";
 
 import "./styles/home_style.css";
-import "../../components/Search/style.css";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import MenuBookRoundedIcon from "@mui/icons-material/MenuBookRounded";
 import openedQuranIcon from "../../assets/images/open_book_icon.svg";
@@ -29,7 +28,7 @@ import quranLogo from "../../assets/images/quran.png";
 import { Close, HomeRounded, MenuRounded } from "@mui/icons-material";
 import { SurahCard } from "../../components/Card/SurahCard";
 import { getSuratDetail, getSuratList } from "./services/quran_service";
-// import { Search } from "../../components/Search/Search";
+import { Search } from "../../components/Search/Search";
 import { ModalDialog } from "../../components/ModalDialog/ModalDialog";
 import { makeStyles } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
@@ -83,9 +82,9 @@ export const Home = () => {
     setOpen(false);
   };
 
-  // const searching = (query) => {
-  //   setQueryString(query);
-  // };
+  const searching = (query) => {
+    setQueryString(query);
+  };
 
   useEffect(async () => {
     const surat = await getSuratList();
@@ -110,7 +109,9 @@ export const Home = () => {
   }, []);
 
   const query = suratList?.filter((item) => {
-    return item.namaLatin.toLowerCase().includes(queryString.trimStart());
+    return item.namaLatin
+      .toLowerCase()
+      .includes(queryString.trimStart().toLowerCase());
   });
 
   // Start of Drawer
@@ -234,17 +235,7 @@ export const Home = () => {
             <p className="header-menu-text-selected">Quran</p>
           </div>
         )}
-        <div className="searchbar-container">
-          <input
-            type="search"
-            name="search"
-            placeholder={"Search"}
-            className="searchInput"
-            value={queryString}
-            onChange={(e) => setQueryString(e.target.value)}
-            // onKeyUp={() => query}
-          />
-        </div>
+        <Search searchQuery={searching} q={queryString} />
       </Header>
       <div
         style={{

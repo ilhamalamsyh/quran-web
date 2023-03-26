@@ -18,7 +18,6 @@ export const Search = ({ searchQuery, q }) => {
         className="searchInput"
         value={q}
         onChange={(e) => setQuery(searchQuery(e.target.value))}
-        onKeyUp={() => query}
       />
     </div>
   );
