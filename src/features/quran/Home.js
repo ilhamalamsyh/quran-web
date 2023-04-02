@@ -25,7 +25,12 @@ import MenuBookRoundedIcon from "@mui/icons-material/MenuBookRounded";
 import openedQuranIcon from "../../assets/images/open_book_icon.svg";
 import dotsNineIcon from "../../assets/images/dots-nine-selected.svg";
 import quranLogo from "../../assets/images/quran.png";
-import { Close, HomeRounded, MenuRounded } from "@mui/icons-material";
+import {
+  CalendarMonthOutlined,
+  Close,
+  HomeRounded,
+  MenuRounded,
+} from "@mui/icons-material";
 import { SurahCard } from "../../components/Card/SurahCard";
 import { getSuratDetail, getSuratList } from "./services/quran_service";
 import { Search } from "../../components/Search/Search";
@@ -134,6 +139,22 @@ export const Home = () => {
     setState({ ...state, [anchor]: open });
   };
 
+  // eslint-disable-next-line no-unused-vars
+  const sideBarMenu = [
+    {
+      title: "Quran",
+      icon: (
+        <img src={openedQuranIcon} height={30} width={30} alt="quran-logo" />
+      ),
+      onClick: () => history.push("/"),
+    },
+    {
+      title: "Imsakiyah",
+      icon: <CalendarMonthOutlined sx={{ color: "#B5C2CD" }} />,
+      onClick: () => history.push("imsakiyah"),
+    },
+  ];
+
   const menuListData = [
     {
       title: "Home",
@@ -144,6 +165,11 @@ export const Home = () => {
       title: "Ayat of the Day",
       icon: <MenuBookRoundedIcon />,
       onClick: handleClickOpen,
+    },
+    {
+      title: "Imsakiyah",
+      icon: <CalendarMonthOutlined />,
+      onClick: () => history.push("imsakiyah"),
     },
   ];
 
@@ -181,10 +207,6 @@ export const Home = () => {
   // End of Drawer
 
   // debugging
-
-  console.log("surat filter: ", query);
-  console.log("surat list: ", suratList);
-  console.log(queryString);
 
   return (
     <React.Fragment>
@@ -244,17 +266,19 @@ export const Home = () => {
       >
         {window.innerWidth >= 500 ? (
           <Sidebar>
-            <div style={{ marginTop: "2em" }}>
-              <Tooltip title="Quran">
-                <IconButton>
-                  <img
-                    src={openedQuranIcon}
-                    height={30}
-                    width={30}
-                    alt="quran-logo"
-                  />
-                </IconButton>
-              </Tooltip>
+            <div
+              style={{
+                marginTop: "2em",
+                display: "flex",
+                flexDirection: "column",
+                gap: 4,
+              }}
+            >
+              {sideBarMenu.map((menu, index) => (
+                <Tooltip key={index} title={menu.title} placement="right">
+                  <IconButton onClick={menu.onClick}>{menu.icon}</IconButton>
+                </Tooltip>
+              ))}
             </div>
           </Sidebar>
         ) : null}
