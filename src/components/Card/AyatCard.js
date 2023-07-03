@@ -12,7 +12,7 @@ import React from "react";
 
 const useStyles = makeStyles(() => ({
   arabText: {
-    width: 700,
+    width: 980,
     fontSize: 25,
     borderRadius: 20,
     display: "flex",
@@ -39,7 +39,7 @@ export const AyatCard = ({ data }) => {
         <Card
           sx={{
             borderRadius: 3,
-            width: 900,
+            width: 1060,
             boxShadow: "0px 2px 40px -28px rgba(0,0,0,0.3)",
             "&:hover": {
               boxShadow: "0 16px 70px -12px rgba(0,0,0,0.3)",

@@ -13,7 +13,7 @@ import { useHistory } from "react-router-dom";
 
 export const SurahCard = ({ menuIndex, data }) => {
   let width = 0;
-  menuIndex === 0 ? (width = 300) : (width = 800);
+  menuIndex === 0 ? (width = 330) : (width = 1017);
   window.innerWidth <= 400
     ? (width = 325)
     : window.innerWidth >= 401 && window.innerWidth <= 500

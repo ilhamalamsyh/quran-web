@@ -326,8 +326,9 @@ export const Home = () => {
             ) : null}
             <Grid
               container
-              paddingLeft={window.innerWidth >= 500 ? 1.2 : null}
+              justifyContent={"center"}
               marginTop={window.innerWidth >= 500 ? 5 : null}
+              marginLeft={window.innerWidth <= 500 ? 1 : null}
               gap={2}
             >
               {menuListIndex === 0 ? (
