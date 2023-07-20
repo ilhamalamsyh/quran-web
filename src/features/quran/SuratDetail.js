@@ -21,6 +21,7 @@ import {
 
 import openedQuranIcon from "../../assets/images/open_book_icon.svg";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
+import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 
 import quranLogo from "../../assets/images/quran.png";
 import Brightness5OutlinedIcon from "@mui/icons-material/Brightness5Outlined";
@@ -36,6 +37,9 @@ import {
 } from "@mui/icons-material";
 import { ModalDialogSuratDetail } from "../../components/ModalDialog/ModalDialogSuratDetail";
 import { makeStyles } from "@material-ui/core";
+import { ReciterDropDown } from "../../components/DropDown/ReciterDropDown";
+import "../../components/DropDown/dropdown.css";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
 const useStyles = makeStyles(() => ({
   ayatList: {
@@ -74,19 +78,26 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+const reciters = [
+  { id: "01", name: "Abdullah Al-Juhany" },
+  { id: "02", name: "Abdul Muhsin Al-Qasim" },
+  { id: "03", name: "Abdurrahman As-Sudais" },
+  { id: "04", name: "Ibrahim Al-Dossari" },
+  { id: "05", name: "Misyari Rasyid Al-'Afasi" },
+];
+
 export const SuratDetail = () => {
+  const history = useHistory();
+  const classes = useStyles();
+
   const { nomor } = useParams();
   const [isQuran, setIsQuran] = useState(true);
   const [ayatList, setAyatList] = useState([]);
   const [surat, setSurat] = useState({});
-  const history = useHistory();
-  const classes = useStyles();
-
-  const surahIndex = Array.from({ length: 114 }, (_, index) => index + 1);
-  // eslint-disable-next-line no-unused-vars
-  const getRandomIndex = Math.floor(Math.random() * surahIndex.length);
-
   const [open, setOpen] = useState(false);
+  const [isOpenReciterMenu, setIsOpenReciterMenu] = useState(false);
+  const [selectedReciter, setSelectedReciter] = useState("05");
+  const [openAudio, setOpenAudio] = useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -101,6 +112,13 @@ export const SuratDetail = () => {
     setSurat(suratDetail?.data?.data);
     setAyatList(suratDetail?.data?.data?.ayat);
   }, []);
+
+  const toogleDropDownReciter = () => setIsOpenReciterMenu(!isOpenReciterMenu);
+
+  const handleReciterClick = (id) => {
+    setSelectedReciter(id);
+    setIsOpenReciterMenu(!isOpenReciterMenu);
+  };
 
   // Start of Drawer
   const [state, setState] = useState({
@@ -236,7 +254,7 @@ export const SuratDetail = () => {
                 container
                 display="flex"
                 flexDirection="column"
-                gap={6}
+                gap={1}
                 paddingTop={2}
               >
                 <Grid item>
@@ -290,6 +308,42 @@ export const SuratDetail = () => {
                       </div>
                     )}
                   </Grid>
+                </Grid>
+                <Grid item>
+                  <ReciterDropDown
+                    reciters={reciters}
+                    toogleDropDownReciter={toogleDropDownReciter}
+                    handleReciterClick={handleReciterClick}
+                    isOpen={isOpenReciterMenu}
+                    selectedReciter={selectedReciter}
+                  />
+                </Grid>
+                <Grid item>
+                  <Button
+                    onClick={() => {
+                      setOpenAudio(true);
+                      setTimeout(() => {
+                        document.getElementById("testsound").play();
+                      }, 1000);
+                    }}
+                    disableRipple
+                    variant="text"
+                    endIcon={<PlayArrowRoundedIcon fontSize="small" />}
+                    sx={{
+                      borderRadius: 20,
+                      fontSize: "14px",
+                      textTransform: "none",
+                      color: "#2c5f2dff",
+                      "&:hover": {
+                        backgroundColor: "white",
+                      },
+                      "@media (max-width: 500px)": {
+                        fontSize: "12px",
+                      },
+                    }}
+                  >
+                    Putar Audio
+                  </Button>
                 </Grid>
                 <Grid item>
                   <Button
@@ -397,6 +451,41 @@ export const SuratDetail = () => {
           </Grid>
         </div>
       </div>
+      {openAudio === true ? (
+        <div style={{ justifyContent: "center", display: "flex" }}>
+          <div
+            style={{
+              background: "#000000",
+              display: "flex",
+              direction: "row",
+              borderRadius: 20,
+            }}
+          >
+            <audio
+              id="testsound"
+              controls
+              src={surat?.audioFull?.[selectedReciter]}
+              style={{
+                "&:hover": { color: "green" },
+                borderRadius: 20,
+                background: "#000000",
+                maxWidth: "500px",
+                "@media (max-width: 500px)": {
+                  width: "300px",
+                },
+              }}
+            />
+            <IconButton
+              sx={{ "&:hover": { color: "green" } }}
+              onClick={() => setOpenAudio(false)}
+            >
+              <CloseRoundedIcon sx={{ color: "#ffffff" }} />
+            </IconButton>
+          </div>
+        </div>
+      ) : (
+        <></>
+      )}
     </React.Fragment>
   );
 };
