@@ -103,7 +103,6 @@ export const Imsakiyah = () => {
   const [solatSchedule, setSolatSchedule] = useState({});
   const [sholatTime, setSholatTime] = useState([]);
 
-  console.log(isQuran);
   const sideBarMenu = [
     {
       title: "Quran",
