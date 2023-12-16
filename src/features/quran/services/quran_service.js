@@ -3,6 +3,19 @@ import axios from "axios";
 const API_ENDPOINT = process.env.REACT_APP_ALQURAN_API_URL;
 const quran_list_endpoint = `${API_ENDPOINT}/surat`;
 const quran_detail_endpoint = `${API_ENDPOINT}/surat`;
+const doa_api_endpoint = "https://doa-doa-api-ahmadramadhan.fly.dev/api";
+
+const getDoaList = async () => {
+  const result = await axios
+    .get(doa_api_endpoint)
+    .then((response) => {
+      return response;
+    })
+    .catch((err) => {
+      err;
+    });
+  return result;
+};
 
 const getSuratList = async () => {
   const result = await axios
@@ -26,4 +39,4 @@ const getSuratDetail = async (nomor) => {
   return result;
 };
 
-export { getSuratList, getSuratDetail };
+export { getSuratList, getSuratDetail, getDoaList };
